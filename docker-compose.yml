@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  apartment-scraper:
+    build: .
+    container_name: wbm-apartment-scraper
+    environment:
+      - EMAIL_USER=${EMAIL_USER}
+      - EMAIL_PASSWORD=${EMAIL_PASSWORD}
+      - NOTIFY_EMAIL=${NOTIFY_EMAIL}
+    volumes:
+      - ./apartments-data.json:/app/apartments-data.json
+      - ./logs:/app/logs
+    restart: unless-stopped
+    network_mode: bridge
+    # Uncomment for specific timezone
+    # environment:
+    #   - TZ=Europe/Berlin
