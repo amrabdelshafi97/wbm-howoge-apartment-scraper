@@ -18,8 +18,8 @@ COPY package.json package-lock.json* ./
 # Install Node dependencies
 RUN npm ci --only=production
 
-# Set Playwright to use system Chromium
-ENV PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=true
+# Install Playwright browsers
+RUN npx playwright install chromium
 
 # Copy application
 COPY apartment-scraper.js .
