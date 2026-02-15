@@ -10,8 +10,7 @@ RUN apk add --no-cache \
     freetype-dev \
     harfbuzz \
     ca-certificates \
-    ttf-dejavu \
-    dumb-init
+    ttf-dejavu
 
 # Copy package files
 COPY package.json package-lock.json* ./
@@ -27,9 +26,6 @@ COPY apartment-scraper.js .
 
 # Ensure Node.js outputs logs to stdout/stderr immediately (no buffering)
 ENV NODE_ENV=production
-
-# Use dumb-init to properly handle signals
-ENTRYPOINT ["/usr/sbin/dumb-init", "--"]
 
 # Run the service with unbuffered output
 CMD ["node", "--no-warnings", "--unhandled-rejections=warn", "apartment-scraper.js"]
