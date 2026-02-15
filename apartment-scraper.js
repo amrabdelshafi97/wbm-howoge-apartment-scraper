@@ -24,10 +24,15 @@ class ApartmentScraper {
     this.telegramToken = process.env.TELEGRAM_BOT_TOKEN;
     this.telegramChatId = process.env.TELEGRAM_CHAT_ID;
 
+    console.log(`[${new Date().toISOString()}] [DEBUG] Environment variables check:`);
+    console.log(`[${new Date().toISOString()}] [DEBUG] NODE_ENV = ${process.env.NODE_ENV}`);
+    console.log(`[${new Date().toISOString()}] [DEBUG] TELEGRAM_BOT_TOKEN exists: ${!!this.telegramToken} (length: ${this.telegramToken?.length || 0})`);
+    console.log(`[${new Date().toISOString()}] [DEBUG] TELEGRAM_CHAT_ID exists: ${!!this.telegramChatId} (value: ${this.telegramChatId || 'undefined'})`);
+
     if (!this.telegramToken || !this.telegramChatId) {
-      console.warn('⚠️  Telegram credentials not configured. Set TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID env vars.');
+      console.warn(`[${new Date().toISOString()}] ⚠️  Telegram credentials not configured. Set TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID env vars.`);
     } else {
-      console.log('✅ Telegram notifications enabled');
+      console.log(`[${new Date().toISOString()}] ✅ Telegram notifications enabled`);
     }
   }
 
