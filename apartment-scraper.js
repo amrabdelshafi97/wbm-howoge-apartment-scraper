@@ -169,10 +169,8 @@ class ApartmentScraper {
   }
 
   filterApartments(apartments) {
-    return apartments.filter(apt =>
-      apt.rooms >= this.config.targetRooms &&
-      apt.rent <= this.config.maxRent
-    );
+    // Returning all apartments without filtering to notify on ALL new listings
+    return apartments;
   }
 
   findNewApartments(currentList) {
@@ -265,27 +263,36 @@ ${details}`;
   }
 
   async run() {
-    const apartments = await this.fetchApartments();
-    console.log(`apartments ----> [${apartments.length}]`);
+    try {
+      console.log(`\n[${new Date().toISOString()}] ========== SCRAPER RUN START ==========`);
 
-    const filteredApartments = this.filterApartments(apartments);
-    console.log(`After filtering (${this.config.targetRooms}R, <€${this.config.maxRent}): ${filteredApartments.length} apartments`);
+      const apartments = await this.fetchApartments();
+      console.log(`[${new Date().toISOString()}] Total apartments fetched: ${apartments.length}`);
 
-    const newApartments = this.findNewApartments(filteredApartments);
+      const filteredApartments = this.filterApartments(apartments);
+      console.log(`[${new Date().toISOString()}] After filtering: ${filteredApartments.length} apartments`);
 
-    if (newApartments.length > 0) {
-      await this.sendNotification(newApartments);
-    } else {
-      console.log(`[${new Date().toISOString()}] No new apartments found. (Total matching: ${filteredApartments.length})`);
+      const newApartments = this.findNewApartments(filteredApartments);
+      console.log(`[${new Date().toISOString()}] New apartments found: ${newApartments.length}`);
+
+      if (newApartments.length > 0) {
+        await this.sendNotification(newApartments);
+      } else {
+        console.log(`[${new Date().toISOString()}] ℹ️  No new apartments found. (Total: ${filteredApartments.length})`);
+      }
+
+      this.lastResults = filteredApartments;
+      this.saveData(filteredApartments);
+
+      console.log(`[${new Date().toISOString()}] ========== SCRAPER RUN END ==========\n`);
+    } catch (error) {
+      console.error(`[${new Date().toISOString()}] ❌ CRITICAL ERROR in scraper run:`, error);
     }
-
-    this.lastResults = filteredApartments;
-    this.saveData(filteredApartments);
   }
 
   start() {
     console.log(`🚀 Apartment Scraper started!`);
-    console.log(`   Looking for: ${this.config.targetRooms} rooms, max €${this.config.maxRent}/month`);
+    console.log(`   Mode: Notifying ALL new apartments found`);
     console.log(`   Check interval: ${this.config.checkInterval}`);
     console.log(`   Data file: ${this.config.dataFile}\n`);
 
@@ -304,6 +311,23 @@ module.exports = ApartmentScraper;
 
 // Run as standalone service
 if (require.main === module) {
-  const scraper = new ApartmentScraper();
-  scraper.start();
+  try {
+    console.log(`[${new Date().toISOString()}] 🚀 Starting Apartment Scraper Service...`);
+    const scraper = new ApartmentScraper();
+    scraper.start();
+
+    // Log unhandled rejections
+    process.on('unhandledRejection', (reason, promise) => {
+      console.error(`[${new Date().toISOString()}] ❌ Unhandled Rejection at:`, promise, 'reason:', reason);
+    });
+
+    // Log uncaught exceptions
+    process.on('uncaughtException', (error) => {
+      console.error(`[${new Date().toISOString()}] ❌ Uncaught Exception:`, error);
+      process.exit(1);
+    });
+  } catch (error) {
+    console.error(`[${new Date().toISOString()}] ❌ Failed to start scraper:`, error);
+    process.exit(1);
+  }
 }
