@@ -60,10 +60,19 @@ class ApartmentScraper {
       console.log(`[${new Date().toISOString()}] Fetching apartments from WBM...`);
 
       console.log(`[${new Date().toISOString()}] Launching browser...`);
-      browser = await chromium.launch({
+
+      // Try to use system Chromium if available, otherwise use downloaded version
+      let launchOptions = {
         headless: true,
         args: ['--no-sandbox', '--disable-setuid-sandbox']
-      });
+      };
+
+      // In production (Docker), use system chromium-browser
+      if (process.env.NODE_ENV === 'production') {
+        launchOptions.executablePath = '/usr/bin/chromium-browser';
+      }
+
+      browser = await chromium.launch(launchOptions);
       console.log(`[${new Date().toISOString()}] Browser launched successfully`);
 
       context = await browser.newContext();
