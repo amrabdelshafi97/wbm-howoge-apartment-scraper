@@ -4,12 +4,9 @@ WORKDIR /app
 
 # Install Playwright dependencies and Chromium
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    chromium-browser \
-    chromium-codecs-ffmpeg \
+    chromium \
     libnss3 \
     libxss1 \
-    libappindicator1 \
-    libindicator7 \
     libgconf-2-4 \
     fonts-dejavu-core \
     fonts-dejavu \

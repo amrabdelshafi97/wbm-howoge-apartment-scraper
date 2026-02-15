@@ -67,9 +67,9 @@ class ApartmentScraper {
         args: ['--no-sandbox', '--disable-setuid-sandbox']
       };
 
-      // In production (Docker), use system chromium-browser
+      // In production (Docker), use system chromium
       if (process.env.NODE_ENV === 'production') {
-        launchOptions.executablePath = '/usr/bin/chromium-browser';
+        launchOptions.executablePath = '/usr/bin/chromium';
       }
 
       browser = await chromium.launch(launchOptions);
