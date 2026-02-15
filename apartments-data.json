@@ -1,105 +1,5 @@
 [
   {
-    "title": "3-Zimmer-Wohnung in Steglitz",
-    "address": "Ostpreussendamm 130A, 12207 Berlin",
-    "rooms": 3,
-    "rent": 1.967,
-    "size": 13,
-    "link": "https://www.wbm.de/wohnungen-berlin/angebote/details/3-zimmer-wohnung-in-steglitz/",
-    "id": "ostpreussendamm_130a__12207_berlin_3_zimmer_wohnung_in_steglitz",
-    "fetchedAt": "2026-02-08T20:57:30.546Z"
-  },
-  {
-    "title": "Mehr Komfort für Ihre Familie - große 4 Zimmerwohnung mit Balkon",
-    "address": "Landsberger Allee 315, 13055 Berlin",
-    "rooms": 4,
-    "rent": 1.943,
-    "size": 44,
-    "link": "https://www.wbm.de/wohnungen-berlin/angebote/details/mehr-komfort-fuer-ihre-familie-grosse-4-zimmerwohnung-mit-balkon/",
-    "id": "landsberger_allee_315__13055_berlin_mehr_komfort_f_r_ihre_familie___gro_e_4_zimmerwohnung_mit_balkon",
-    "fetchedAt": "2026-02-08T20:57:30.546Z"
-  },
-  {
-    "title": "Ihr Highlight im Dachgeschoss -  3 Zimmer mit 2 Terrassen",
-    "address": "Landsberger Allee 317, 13055 Berlin",
-    "rooms": 3,
-    "rent": 1.78,
-    "size": 9,
-    "link": "https://www.wbm.de/wohnungen-berlin/angebote/details/ihr-highlight-im-dachgeschoss-3-zimmer-mit-2-terrassen/",
-    "id": "landsberger_allee_317__13055_berlin_ihr_highlight_im_dachgeschoss____3_zimmer_mit_2_terrassen",
-    "fetchedAt": "2026-02-08T20:57:30.546Z"
-  },
-  {
-    "title": "Mehr Raum für Familie - 4-Zimmer mit Loggia",
-    "address": "Landsberger Allee 313, 13055 Berlin",
-    "rooms": 4,
-    "rent": 1.835,
-    "size": 99,
-    "link": "https://www.wbm.de/wohnungen-berlin/angebote/details/mehr-raum-fuer-familie-4-zimmer-mit-loggia/",
-    "id": "landsberger_allee_313__13055_berlin_mehr_raum_f_r_familie___4_zimmer_mit_loggia",
-    "fetchedAt": "2026-02-08T20:57:30.546Z"
-  },
-  {
-    "title": "Familienfreundlich. Zentral. Großzügig - Ihr neues Zuhause wartet",
-    "address": "Landsberger Allee 317, 13055 Berlin",
-    "rooms": 4,
-    "rent": 1.862,
-    "size": 55,
-    "link": "https://www.wbm.de/wohnungen-berlin/angebote/details/familienfreundlich-zentral-grosszuegig-ihr-neues-zuhause-wartet/",
-    "id": "landsberger_allee_317__13055_berlin_familienfreundlich__zentral__gro_z_gig___ihr_neues_zuhause_wartet",
-    "fetchedAt": "2026-02-08T20:57:30.546Z"
-  },
-  {
-    "title": "Moderne 4-Zimmer-Wohnung mit 2 Bädern u. Balkon",
-    "address": "Landsberger Allee 317, 13055 Berlin",
-    "rooms": 4,
-    "rent": 1.862,
-    "size": 55,
-    "link": "https://www.wbm.de/wohnungen-berlin/angebote/details/moderne-4-zimmer-wohnung-mit-2-baedern-u-balkon/",
-    "id": "landsberger_allee_317__13055_berlin_moderne_4_zimmer_wohnung_mit_2_b_dern_u__balkon",
-    "fetchedAt": "2026-02-08T20:57:30.546Z"
-  },
-  {
-    "title": "Helle 3-Zimmer mit Balkon in Lichtenberg",
-    "address": "Landsberger Allee 319, 13055 Berlin",
-    "rooms": 3,
-    "rent": 1.588,
-    "size": 44,
-    "link": "https://www.wbm.de/wohnungen-berlin/angebote/details/helle-3-zimmer-mit-balkon-in-lichtenberg/",
-    "id": "landsberger_allee_319__13055_berlin_helle_3_zimmer_mit_balkon_in_lichtenberg",
-    "fetchedAt": "2026-02-08T20:57:30.546Z"
-  },
-  {
-    "title": "Ein Zuhause für Paare oder kleine Familien: 3 Zimmer, Stadtlage, Wohlfühlambiente",
-    "address": "Heldburger Strasse 2, 13055 Berlin",
-    "rooms": 3,
-    "rent": 1.714,
-    "size": 90,
-    "link": "https://www.wbm.de/wohnungen-berlin/angebote/details/ein-zuhause-fuer-paare-oder-kleine-familien-3-zimmer-stadtlage-wohlfuehlambiente/",
-    "id": "heldburger_strasse_2__13055_berlin_ein_zuhause_f_r_paare_oder_kleine_familien__3_zimmer__stadtlage__wohlf_hlambiente",
-    "fetchedAt": "2026-02-08T20:57:30.546Z"
-  },
-  {
-    "title": "Schöne 5-Zimmer in Lichtenberg",
-    "address": "Heldburger Strasse 4, 13055 Berlin",
-    "rooms": 5,
-    "rent": 2.192,
-    "size": 40,
-    "link": "https://www.wbm.de/wohnungen-berlin/angebote/details/schoene-5-zimmer-in-lichtenberg/",
-    "id": "heldburger_strasse_4__13055_berlin_sch_ne_5_zimmer_in_lichtenberg",
-    "fetchedAt": "2026-02-08T20:57:30.546Z"
-  },
-  {
-    "title": "Viel Platz auf 5 Zimmern in Lichtenberg",
-    "address": "Heldburger Strasse 6, 13055 Berlin",
-    "rooms": 5,
-    "rent": 2.183,
-    "size": 37,
-    "link": "https://www.wbm.de/wohnungen-berlin/angebote/details/viel-platz-auf-5-zimmern-in-lichtenberg/",
-    "id": "heldburger_strasse_6__13055_berlin_viel_platz_auf_5_zimmern_in_lichtenberg",
-    "fetchedAt": "2026-02-08T20:57:30.546Z"
-  },
-  {
     "title": "3 Zimmerdachgeschoßwohnung in Spandau",
     "address": "Mertensstrasse 24, 13587 Berlin",
     "rooms": 3,
@@ -107,6 +7,86 @@
     "size": 55,
     "link": "https://www.wbm.de/wohnungen-berlin/angebote/details/3-zimmerdachgeschosswohnung-in-spandau/",
     "id": "mertensstrasse_24__13587_berlin_3_zimmerdachgescho_wohnung_in_spandau",
-    "fetchedAt": "2026-02-08T20:57:30.546Z"
+    "fetchedAt": "2026-02-15T13:15:33.767Z"
+  },
+  {
+    "title": "2-Zimmer-Wohnung in Mitte",
+    "address": "Seydelstrasse 31, 10117 Berlin",
+    "rooms": 2,
+    "rent": 1.327,
+    "size": 88,
+    "link": "https://www.wbm.de/wohnungen-berlin/angebote/details/2-zimmer-wohnung-in-mitte/",
+    "id": "seydelstrasse_31__10117_berlin_2_zimmer_wohnung_in_mitte",
+    "fetchedAt": "2026-02-15T13:15:33.767Z"
+  },
+  {
+    "title": "Ideal für Paare oder kleine Familien - 3-Zimmer mit Balkon und Wasserblick",
+    "address": "Asnièresstrasse 5, 13587 Berlin",
+    "rooms": 3,
+    "rent": 1.668,
+    "size": 70,
+    "link": "https://www.wbm.de/wohnungen-berlin/angebote/details/ideal-fuer-paare-oder-kleine-familien-3-zimmer-mit-balkon-und-wasserblick/",
+    "id": "asni_resstrasse_5__13587_berlin_ideal_f_r_paare_oder_kleine_familien___3_zimmer_mit_balkon_und_wasserblick",
+    "fetchedAt": "2026-02-15T13:15:33.767Z"
+  },
+  {
+    "title": "Letzte Einheit - Familien-Wohnung mit Gäste-WC und Balkon mit Wasserblick",
+    "address": "Asnièresstrasse 5, 13587 Berlin",
+    "rooms": 4,
+    "rent": 1.855,
+    "size": 11,
+    "link": "https://www.wbm.de/wohnungen-berlin/angebote/details/letzte-einheit-familien-wohnung-mit-gaeste-wc-und-balkon-mit-wasserblick/",
+    "id": "asni_resstrasse_5__13587_berlin_letzte_einheit___familien_wohnung_mit_g_ste_wc_und_balkon_mit_wasserblick",
+    "fetchedAt": "2026-02-15T13:15:33.767Z"
+  },
+  {
+    "title": "Wohnen mit Wasserblick - modernes Zuhause- 3 Zimmer mit Balkon",
+    "address": "Iznikstrasse 4, 13587 Berlin",
+    "rooms": 3,
+    "rent": 1.773,
+    "size": 33,
+    "link": "https://www.wbm.de/wohnungen-berlin/angebote/details/wohnen-mit-wasserblick-modernes-zuhause-3-zimmer-mit-balkon/",
+    "id": "iznikstrasse_4__13587_berlin_wohnen_mit_wasserblick___modernes_zuhause__3_zimmer_mit_balkon",
+    "fetchedAt": "2026-02-15T13:15:33.768Z"
+  },
+  {
+    "title": "Familienwohnung mit Balkon und Ausblick- Ihr Zuhause am Wasser",
+    "address": "Iznikstrasse 6, 13587 Berlin",
+    "rooms": 4,
+    "rent": 1.792,
+    "size": 87,
+    "link": "https://www.wbm.de/wohnungen-berlin/angebote/details/familienwohnung-mit-balkon-und-ausblick-ihr-zuhause-am-wasser/",
+    "id": "iznikstrasse_6__13587_berlin_familienwohnung_mit_balkon_und_ausblick__ihr_zuhause_am_wasser",
+    "fetchedAt": "2026-02-15T13:15:33.768Z"
+  },
+  {
+    "title": "Zuhause mit Seltenheitswert- kompakte 4 Zimmer Wohnung mit Wasserblick",
+    "address": "Iznikstrasse 6, 13587 Berlin",
+    "rooms": 4,
+    "rent": 1.74,
+    "size": 59,
+    "link": "https://www.wbm.de/wohnungen-berlin/angebote/details/zuhause-mit-seltenheitswert-kompakte-4-zimmer-wohnung-mit-wasserblick/",
+    "id": "iznikstrasse_6__13587_berlin_zuhause_mit_seltenheitswert__kompakte_4_zimmer_wohnung_mit_wasserblick",
+    "fetchedAt": "2026-02-15T13:15:33.768Z"
+  },
+  {
+    "title": "4-Zi-Wohntraum mit Balkon in Wassernähe in Spandau",
+    "address": "Iznikstrasse 4, 13587 Berlin",
+    "rooms": 4,
+    "rent": 1.95,
+    "size": 44,
+    "link": "https://www.wbm.de/wohnungen-berlin/angebote/details/4-zi-wohntraum-mit-balkon-in-wassernaehe-in-spandau/",
+    "id": "iznikstrasse_4__13587_berlin_4_zi_wohntraum_mit_balkon_in_wassern_he_in_spandau",
+    "fetchedAt": "2026-02-15T13:15:33.768Z"
+  },
+  {
+    "title": "4-Zimmer-Wohnung in Spandau",
+    "address": "Parkstrasse 46, 13585 Berlin",
+    "rooms": 4,
+    "rent": 1.476,
+    "size": 34,
+    "link": "https://www.wbm.de/wohnungen-berlin/angebote/details/4-zimmer-wohnung-in-spandau-1/",
+    "id": "parkstrasse_46__13585_berlin_4_zimmer_wohnung_in_spandau",
+    "fetchedAt": "2026-02-15T13:15:33.768Z"
   }
 ]

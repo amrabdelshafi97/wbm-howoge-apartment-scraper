@@ -59,32 +59,42 @@ class ApartmentScraper {
     try {
       console.log(`[${new Date().toISOString()}] Fetching apartments from WBM...`);
 
-      browser = await chromium.launch({ headless: true });
+      console.log(`[${new Date().toISOString()}] Launching browser...`);
+      browser = await chromium.launch({
+        headless: true,
+        args: ['--no-sandbox', '--disable-setuid-sandbox']
+      });
+      console.log(`[${new Date().toISOString()}] Browser launched successfully`);
+
       context = await browser.newContext();
       page = await context.newPage();
+      console.log(`[${new Date().toISOString()}] Context and page created`);
 
-      console.log('Loading page...');
+      console.log(`[${new Date().toISOString()}] Loading page: ${this.config.url}`);
       await page.goto(this.config.url, { waitUntil: 'networkidle', timeout: 30000 });
+      console.log(`[${new Date().toISOString()}] Page loaded successfully`);
 
       // Wait for apartment listings to load
-      console.log('Waiting for apartment listings...');
+      console.log(`[${new Date().toISOString()}] Waiting for apartment listings...`);
       try {
         await page.locator('article.immo-element').first().waitFor({ timeout: 10000 });
+        console.log(`[${new Date().toISOString()}] Apartment listings found`);
       } catch (e) {
-        console.warn('⚠️  Timeout waiting for listings, continuing anyway...');
+        console.warn(`[${new Date().toISOString()}] ⚠️  Timeout waiting for listings, continuing anyway... Error: ${e.message}`);
       }
 
       // First check if elements exist
       const count = await page.locator('article.immo-element').count();
-      console.log(`Before evaluate: found ${count} immo-element articles on page`);
+      console.log(`[${new Date().toISOString()}] Before evaluate: found ${count} immo-element articles on page`);
 
       // Extract apartments using page.evaluate with debugging
-      console.log('Extracting apartments...');
+      console.log(`[${new Date().toISOString()}] Extracting apartments...`);
       const apartments = await page.evaluate(() => {
         const results = [];
         const listings = document.querySelectorAll('article.immo-element:not(.teaserBox)');
         let skipped = 0;
         let extracted = 0;
+        let missingFields = 0;
 
         listings.forEach((item, idx) => {
           try {
@@ -94,6 +104,7 @@ class ApartmentScraper {
             const rentEl = item.querySelector('.main-property-rent');
 
             if (!titleEl || !addressEl || !roomsEl) {
+              missingFields++;
               skipped++;
               return;
             }
@@ -129,7 +140,7 @@ class ApartmentScraper {
 
         return {
           apartments: results,
-          stats: { total: listings.length, extracted, skipped }
+          stats: { total: listings.length, extracted, skipped, missingFields }
         };
       });
 
@@ -137,9 +148,9 @@ class ApartmentScraper {
       const stats = apartments.stats;
 
       if (stats) {
-        console.log(`Stats: Found ${stats.total} total teaserBox elements, extracted ${stats.extracted}, skipped ${stats.skipped}`);
+        console.log(`[${new Date().toISOString()}] Stats: Found ${stats.total} total articles, extracted ${stats.extracted}, missing fields ${stats.missingFields}, skipped ${stats.skipped}`);
       }
-      console.log(`Found ${apartmentsList.length} valid apartments`);
+      console.log(`[${new Date().toISOString()}] Found ${apartmentsList.length} valid apartments`);
 
       await context.close();
       await browser.close();
@@ -152,13 +163,14 @@ class ApartmentScraper {
       }));
 
     } catch (error) {
-      console.error('Error fetching apartments:', error.message);
+      console.error(`[${new Date().toISOString()}] ❌ Error fetching apartments:`, error.message);
+      console.error(`[${new Date().toISOString()}] Error stack:`, error.stack);
       try {
         if (page) await page.close();
         if (context) await context.close();
         if (browser) await browser.close();
       } catch (e) {
-        // Ignore cleanup errors
+        console.error(`[${new Date().toISOString()}] Error during cleanup:`, e.message);
       }
       return [];
     }
