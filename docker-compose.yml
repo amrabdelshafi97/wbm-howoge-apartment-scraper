@@ -4,15 +4,44 @@ services:
   apartment-scraper:
     build: .
     container_name: wbm-apartment-scraper
+
+    # Resource limits to prevent EAGAIN errors
+    mem_limit: 1g
+    mem_reservation: 512m
+
+    # Increase shared memory for Chromium (prevents spawn failures)
+    shm_size: 2gb
+
+    # File descriptor and process limits
+    ulimits:
+      nofile:
+        soft: 65536
+        hard: 65536
+      nproc:
+        soft: 4096
+        hard: 4096
+
     environment:
       - EMAIL_USER=${EMAIL_USER}
       - EMAIL_PASSWORD=${EMAIL_PASSWORD}
       - NOTIFY_EMAIL=${NOTIFY_EMAIL}
+      - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN}
+      - TELEGRAM_CHAT_ID=${TELEGRAM_CHAT_ID}
+
     volumes:
       - ./apartments-data.json:/app/apartments-data.json
       - ./logs:/app/logs
+
     restart: unless-stopped
     network_mode: bridge
+
+    # Logging configuration
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
     # Uncomment for specific timezone
     # environment:
     #   - TZ=Europe/Berlin

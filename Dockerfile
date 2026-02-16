@@ -2,7 +2,7 @@ FROM node:18-slim
 
 WORKDIR /app
 
-# Install Playwright dependencies and Chromium
+# Install Playwright dependencies, Chromium, and process utilities
 RUN apt-get update && apt-get install -y --no-install-recommends \
     chromium \
     libnss3 \
@@ -11,6 +11,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     fonts-dejavu-core \
     fonts-dejavu \
     ca-certificates \
+    procps \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy package files

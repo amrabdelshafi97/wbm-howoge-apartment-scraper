@@ -56,6 +56,37 @@ class ApartmentScraper {
     }
   }
 
+  async launchBrowserWithRetry(options, maxRetries = 3) {
+    for (let attempt = 1; attempt <= maxRetries; attempt++) {
+      try {
+        // Clean up zombie chromium processes before attempting launch
+        if (attempt === 1 || attempt > 1) {
+          try {
+            const { execSync } = require('child_process');
+            execSync('pkill -f chromium || true', { stdio: 'ignore' });
+            console.log(`[${new Date().toISOString()}] Cleaned up zombie chromium processes`);
+            // Small delay to ensure processes are cleaned up
+            await new Promise(resolve => setTimeout(resolve, 500));
+          } catch (e) {
+            // Process cleanup failed, continue anyway
+          }
+        }
+
+        return await chromium.launch(options);
+      } catch (error) {
+        console.error(`[${new Date().toISOString()}] Browser launch failed (attempt ${attempt}/${maxRetries}): ${error.message}`);
+
+        if (attempt === maxRetries) {
+          throw error;
+        }
+
+        const delay = Math.pow(2, attempt) * 1000;
+        console.error(`[${new Date().toISOString()}] Retrying in ${delay}ms...`);
+        await new Promise(resolve => setTimeout(resolve, delay));
+      }
+    }
+  }
+
   async fetchApartments() {
     let browser;
     let context;
@@ -77,7 +108,7 @@ class ApartmentScraper {
         launchOptions.executablePath = '/usr/bin/chromium';
       }
 
-      browser = await chromium.launch(launchOptions);
+      browser = await this.launchBrowserWithRetry(launchOptions);
       console.log(`[${new Date().toISOString()}] Browser launched successfully`);
 
       context = await browser.newContext();
