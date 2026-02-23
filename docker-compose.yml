@@ -6,8 +6,8 @@ services:
     container_name: wbm-apartment-scraper
 
     # Resource limits to prevent EAGAIN errors
-    mem_limit: 1g
-    mem_reservation: 512m
+    mem_limit: 2g
+    mem_reservation: 1g
 
     # Increase shared memory for Chromium (prevents spawn failures)
     shm_size: 2gb
@@ -18,8 +18,8 @@ services:
         soft: 65536
         hard: 65536
       nproc:
-        soft: 4096
-        hard: 4096
+        soft: 8192
+        hard: 8192
 
     environment:
       - EMAIL_USER=${EMAIL_USER}

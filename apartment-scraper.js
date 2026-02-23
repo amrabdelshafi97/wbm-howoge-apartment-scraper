@@ -59,14 +59,14 @@ class ApartmentScraper {
   async launchBrowserWithRetry(options, maxRetries = 3) {
     for (let attempt = 1; attempt <= maxRetries; attempt++) {
       try {
-        // Clean up zombie chromium processes before attempting launch
-        if (attempt === 1 || attempt > 1) {
+        // Only clean up on retry attempts, not first attempt
+        if (attempt > 1) {
           try {
             const { execSync } = require('child_process');
-            execSync('pkill -f chromium || true', { stdio: 'ignore' });
-            console.log(`[${new Date().toISOString()}] Cleaned up zombie chromium processes`);
-            // Small delay to ensure processes are cleaned up
-            await new Promise(resolve => setTimeout(resolve, 500));
+            execSync('pkill -9 chromium || true', { stdio: 'ignore' });
+            console.log(`[${new Date().toISOString()}] Force-killed zombie chromium processes`);
+            // Longer delay to ensure processes are fully reaped by OS
+            await new Promise(resolve => setTimeout(resolve, 2000));
           } catch (e) {
             // Process cleanup failed, continue anyway
           }
