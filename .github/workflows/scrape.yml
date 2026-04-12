@@ -34,11 +34,8 @@ jobs:
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-        run: node -e "
-          const ApartmentScraper = require('./apartment-scraper.js');
-          const scraper = new ApartmentScraper();
-          scraper.run().then(() => process.exit(0)).catch(e => { console.error(e); process.exit(1); });
-        "
+        run: |
+          node -e "const ApartmentScraper = require('./apartment-scraper.js'); const scraper = new ApartmentScraper(); scraper.run().then(() => process.exit(0)).catch(e => { console.error(e); process.exit(1); });"
 
       - name: Commit updated apartments data
         run: |
