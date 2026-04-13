@@ -7,7 +7,7 @@
     "size": 63,
     "link": "https://www.wbm.de/wohnungen-berlin/angebote/details/3-zimmerdachgeschosswohnung-mit-blick-ueber-spandau/",
     "id": "goltzstrasse_49__13587_berlin_3_zimmerdachgescho_wohnung_mit_blick__ber_spandau",
-    "fetchedAt": "2026-04-13T13:21:01.131Z"
+    "fetchedAt": "2026-04-13T13:30:55.968Z"
   },
   {
     "title": "3-Zimmer-Wohnung in Spandau",
@@ -17,7 +17,7 @@
     "size": 92,
     "link": "https://www.wbm.de/wohnungen-berlin/angebote/details/3-zimmer-wohnung-in-spandau-1/",
     "id": "pepitapromenade_13__13587_berlin_3_zimmer_wohnung_in_spandau",
-    "fetchedAt": "2026-04-13T13:21:01.131Z"
+    "fetchedAt": "2026-04-13T13:30:55.968Z"
   },
   {
     "title": "3 Zimmerdachgeschoßwohnung in Spandau",
@@ -27,7 +27,7 @@
     "size": 55,
     "link": "https://www.wbm.de/wohnungen-berlin/angebote/details/3-zimmerdachgeschosswohnung-in-spandau/",
     "id": "mertensstrasse_24__13587_berlin_3_zimmerdachgescho_wohnung_in_spandau",
-    "fetchedAt": "2026-04-13T13:21:01.131Z"
+    "fetchedAt": "2026-04-13T13:30:55.968Z"
   },
   {
     "title": "WBS  160-220 für 3-Zimmer-Wohnung in Charlottenburg",
@@ -37,17 +37,7 @@
     "size": 60,
     "link": "https://www.wbm.de/wohnungen-berlin/angebote/details/wbs-160-220-fuer-3-zimmer-wohnung-in-charlottenburg/",
     "id": "cauerstrasse_13__10587_berlin_wbs__160_220_f_r_3_zimmer_wohnung_in_charlottenburg",
-    "fetchedAt": "2026-04-13T13:21:01.131Z"
-  },
-  {
-    "title": "3-Zimmer-Wohnung in Mitte",
-    "address": "Rochstrasse 9, 10178 Berlin",
-    "rooms": 3,
-    "rent": 995.73,
-    "size": 95,
-    "link": "https://www.wbm.de/wohnungen-berlin/angebote/details/3-zimmer-wohnung-in-mitte/",
-    "id": "rochstrasse_9__10178_berlin_3_zimmer_wohnung_in_mitte",
-    "fetchedAt": "2026-04-13T13:21:01.131Z"
+    "fetchedAt": "2026-04-13T13:30:55.968Z"
   },
   {
     "title": "Lichtdurchflutetes DG  3-Zimmer-Wohnung in Charlottenburg",
@@ -57,7 +47,7 @@
     "size": 42,
     "link": "https://www.wbm.de/wohnungen-berlin/angebote/details/lichtdurchflutetes-dg-3-zimmer-wohnung-in-charlottenburg/",
     "id": "goethestrasse_10a__10623_berlin_lichtdurchflutetes_dg__3_zimmer_wohnung_in_charlottenburg",
-    "fetchedAt": "2026-04-13T13:21:01.131Z"
+    "fetchedAt": "2026-04-13T13:30:55.968Z"
   },
   {
     "title": "Neubauwohnung mit 2-Zimmer  in Spandau direkt an der Havel",
@@ -67,7 +57,7 @@
     "size": 68,
     "link": "https://www.wbm.de/wohnungen-berlin/angebote/details/neubauwohnung-mit-2-zimmer-in-spandau-direkt-an-der-havel/",
     "id": "daumstrasse_83__13599_berlin_neubauwohnung_mit_2_zimmer__in_spandau_direkt_an_der_havel",
-    "fetchedAt": "2026-04-13T13:21:01.131Z"
+    "fetchedAt": "2026-04-13T13:30:55.968Z"
   },
   {
     "title": "WBS 160-220 für 3-Zimmer-Wohnung in Mitte",
@@ -77,6 +67,6 @@
     "size": 88,
     "link": "https://www.wbm.de/wohnungen-berlin/angebote/details/wbs-160-220-fuer-3-zimmer-wohnung-in-mitte/",
     "id": "rathausstrasse_13__10178_berlin_wbs_160_220_f_r_3_zimmer_wohnung_in_mitte",
-    "fetchedAt": "2026-04-13T13:21:01.132Z"
+    "fetchedAt": "2026-04-13T13:30:55.968Z"
   }
 ]
