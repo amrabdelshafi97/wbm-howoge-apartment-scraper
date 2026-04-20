@@ -103,122 +103,156 @@ class HowogeScraper {
       page = await context.newPage();
       console.log(`[${new Date().toISOString()}] [Howoge] Context and page created`);
 
-      console.log(`[${new Date().toISOString()}] [Howoge] Loading page: ${this.config.url}`);
-      await page.goto(this.config.url, { waitUntil: 'networkidle', timeout: 30000 });
-      console.log(`[${new Date().toISOString()}] [Howoge] Page loaded successfully`);
+      const allApartments = [];
+      let currentPage = 1;
+      let hasMorePages = true;
+      const MAX_PAGES = 50; // Safety limit to prevent infinite loops
 
-      // Wait for apartment listings to load
-      console.log(`[${new Date().toISOString()}] [Howoge] Waiting for apartment listings...`);
-      try {
-        await page.locator('.flat-single-grid-item').first().waitFor({ timeout: 10000 });
-        console.log(`[${new Date().toISOString()}] [Howoge] Apartment listings found`);
-      } catch (e) {
-        console.warn(`[${new Date().toISOString()}] [Howoge] ⚠️  Timeout waiting for listings, continuing anyway...`);
-      }
+      // Pagination loop
+      while (hasMorePages && currentPage <= MAX_PAGES) {
+        try {
+          const pageUrl = `https://www.howoge.de/immobiliensuche/wohnungssuche.html?tx_howrealestate_json_list%5Bpage%5D=${currentPage}&tx_howrealestate_json_list%5Blimit%5D=12&tx_howrealestate_json_list%5Broooms%5D=3&tx_howrealestate_json_list%5Bwbs%5D=`;
 
-      // Extract apartments using page.evaluate
-      console.log(`[${new Date().toISOString()}] [Howoge] Extracting apartments...`);
-      const apartments = await page.evaluate(() => {
-        const results = [];
-        const listings = document.querySelectorAll('.flat-single-grid-item');
+          console.log(`[${new Date().toISOString()}] [Howoge] Loading page ${currentPage}: ${pageUrl}`);
+          await page.goto(pageUrl, { waitUntil: 'networkidle', timeout: 30000 });
+          console.log(`[${new Date().toISOString()}] [Howoge] Page ${currentPage} loaded successfully`);
 
-        let extracted = 0;
-        let skipped = 0;
-
-        listings.forEach((item) => {
+          // Wait for apartment listings to load
+          console.log(`[${new Date().toISOString()}] [Howoge] Waiting for apartment listings on page ${currentPage}...`);
           try {
-            // Extract address from the address link
-            const addressLink = item.querySelector('.address a.flat-single--link');
-            if (!addressLink) {
-              skipped++;
-              return;
-            }
-
-            const address = addressLink.textContent?.trim() || '';
-            const link = addressLink.href || '';
-
-            // Extract notice/title (e.g., "3-Zimmer-Wohnung (WBS 100-140)")
-            const noticeEl = item.querySelector('.notice');
-            const title = noticeEl?.textContent?.trim() || address;
-
-            // Extract rooms from notice text
-            let rooms = 0;
-            const roomsMatch = (noticeEl?.textContent || '').match(/(\d+)\s*-?Zimmer/i);
-            if (roomsMatch) {
-              rooms = parseInt(roomsMatch[1]);
-            }
-
-            // Extract rent from any element containing €
-            let rent = 0;
-            const fullText = item.textContent || '';
-            const allPriceMatches = fullText.match(/(\d+(?:[.,]\d+)?)\s*€/g);
-            if (allPriceMatches && allPriceMatches.length > 0) {
-              // Try to find the rent (usually the first price mentioned after warmmiete)
-              const rentMatches = fullText.match(/Warmmiete[^\d]*(\d+(?:[.,]\d+)?)/i);
-              if (rentMatches) {
-                rent = parseFloat(rentMatches[1].replace(',', '.'));
-              } else {
-                // Fallback: use the first price found
-                rent = parseFloat(allPriceMatches[0].replace(',', '.'));
-              }
-            }
-
-            // Extract size from details
-            let size = 0;
-            const sizeMatch = fullText.match(/(\d+)\s*m²/i);
-            if (sizeMatch) {
-              size = parseInt(sizeMatch[1]);
-            }
-
-            // Only include if we have essential info (address and rooms)
-            if (address && rooms > 0) {
-              results.push({
-                title,
-                address,
-                rooms,
-                rent,
-                size,
-                link
-              });
-              extracted++;
-            } else if (address) {
-              // Include without rooms but with other details
-              results.push({
-                title,
-                address,
-                rooms,
-                rent,
-                size,
-                link
-              });
-              extracted++;
-            } else {
-              skipped++;
-            }
+            await page.locator('.flat-single-grid-item').first().waitFor({ timeout: 10000 });
+            console.log(`[${new Date().toISOString()}] [Howoge] Apartment listings found on page ${currentPage}`);
           } catch (e) {
-            skipped++;
+            console.warn(`[${new Date().toISOString()}] [Howoge] ⚠️  Timeout waiting for listings on page ${currentPage}, may be last page`);
           }
-        });
+        } catch (pageError) {
+          console.error(`[${new Date().toISOString()}] [Howoge] Error loading page ${currentPage}: ${pageError.message}`);
+          hasMorePages = false;
+          break;
+        }
 
-        return {
-          apartments: results,
-          stats: { total: listings.length, extracted, skipped }
-        };
-      });
+        // Extract apartments from current page using page.evaluate
+        console.log(`[${new Date().toISOString()}] [Howoge] Extracting apartments from page ${currentPage}...`);
+        let pageApartments;
+        try {
+          pageApartments = await page.evaluate(() => {
+          const results = [];
+          const listings = document.querySelectorAll('.flat-single-grid-item');
 
-      const apartmentsList = apartments.apartments || apartments;
-      const stats = apartments.stats;
+          let extracted = 0;
+          let skipped = 0;
 
-      if (stats) {
-        console.log(`[${new Date().toISOString()}] [Howoge] Stats: Found ${stats.total} total listings, extracted ${stats.extracted}, skipped ${stats.skipped}`);
+          listings.forEach((item) => {
+            try {
+              // Extract address from the address link
+              const addressLink = item.querySelector('.address a.flat-single--link');
+              if (!addressLink) {
+                skipped++;
+                return;
+              }
+
+              const address = addressLink.textContent?.trim() || '';
+              const link = addressLink.href || '';
+
+              // Extract notice/title (e.g., "3-Zimmer-Wohnung (WBS 100-140)")
+              const noticeEl = item.querySelector('.notice');
+              const title = noticeEl?.textContent?.trim() || address;
+
+              // Extract rooms from notice text
+              let rooms = 0;
+              const roomsMatch = (noticeEl?.textContent || '').match(/(\d+)\s*-?Zimmer/i);
+              if (roomsMatch) {
+                rooms = parseInt(roomsMatch[1]);
+              }
+
+              // Extract rent from any element containing €
+              let rent = 0;
+              const fullText = item.textContent || '';
+              const allPriceMatches = fullText.match(/(\d+(?:[.,]\d+)?)\s*€/g);
+              if (allPriceMatches && allPriceMatches.length > 0) {
+                // Try to find the rent (usually the first price mentioned after warmmiete)
+                const rentMatches = fullText.match(/Warmmiete[^\d]*(\d+(?:[.,]\d+)?)/i);
+                if (rentMatches) {
+                  rent = parseFloat(rentMatches[1].replace(',', '.'));
+                } else {
+                  // Fallback: use the first price found
+                  rent = parseFloat(allPriceMatches[0].replace(',', '.'));
+                }
+              }
+
+              // Extract size from details
+              let size = 0;
+              const sizeMatch = fullText.match(/(\d+)\s*m²/i);
+              if (sizeMatch) {
+                size = parseInt(sizeMatch[1]);
+              }
+
+              // Only include if we have essential info (address and rooms)
+              if (address && rooms > 0) {
+                results.push({
+                  title,
+                  address,
+                  rooms,
+                  rent,
+                  size,
+                  link
+                });
+                extracted++;
+              } else if (address) {
+                // Include without rooms but with other details
+                results.push({
+                  title,
+                  address,
+                  rooms,
+                  rent,
+                  size,
+                  link
+                });
+                extracted++;
+              } else {
+                skipped++;
+              }
+            } catch (e) {
+              skipped++;
+            }
+          });
+
+          return {
+            apartments: results,
+            stats: { total: listings.length, extracted, skipped }
+          };
+          });
+        } catch (evalError) {
+          console.error(`[${new Date().toISOString()}] [Howoge] Error evaluating page ${currentPage}: ${evalError.message}`);
+          hasMorePages = false;
+          break;
+        }
+
+        const apartmentsList = pageApartments.apartments || pageApartments;
+        const stats = pageApartments.stats;
+
+        if (stats) {
+          console.log(`[${new Date().toISOString()}] [Howoge] Page ${currentPage} stats: Found ${stats.total} total listings, extracted ${stats.extracted}, skipped ${stats.skipped}`);
+        }
+        console.log(`[${new Date().toISOString()}] [Howoge] Page ${currentPage}: Found ${apartmentsList.length} valid apartments`);
+
+        // If no apartments found on this page, stop pagination
+        if (apartmentsList.length === 0) {
+          hasMorePages = false;
+          console.log(`[${new Date().toISOString()}] [Howoge] No apartments found on page ${currentPage}, stopping pagination`);
+        } else {
+          allApartments.push(...apartmentsList);
+          currentPage++;
+        }
       }
-      console.log(`[${new Date().toISOString()}] [Howoge] Found ${apartmentsList.length} valid apartments`);
 
       await context.close();
       await browser.close();
 
+      console.log(`[${new Date().toISOString()}] [Howoge] Total apartments fetched across all pages: ${allApartments.length}`);
+
       // Add IDs and timestamps, mark as Howoge source
-      return apartmentsList.map(apt => ({
+      return allApartments.map(apt => ({
         ...apt,
         source: 'Howoge',
         id: this.generateId(apt.address, apt.title),
