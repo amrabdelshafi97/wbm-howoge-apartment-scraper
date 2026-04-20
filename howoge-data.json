@@ -1,0 +1,24 @@
+[
+  {
+    "title": "3-Zimmer-Wohnung (WBS 100-140)",
+    "address": "Streitstraße 5, 13587 Berlin, Hakenfelde",
+    "rooms": 3,
+    "rent": 803,
+    "size": 73,
+    "link": "https://www.howoge.de/immobiliensuche/wohnungssuche/detail/1771-14536-9997.html",
+    "source": "Howoge",
+    "id": "howoge_streitstra_e_5__13587_berlin__hakenfelde_3_zimmer_wohnung__wbs_100_140_",
+    "fetchedAt": "2026-04-20T13:45:02.335Z"
+  },
+  {
+    "title": "3-Zimmerwohnung (mit WBS100 oder 140)",
+    "address": "Landsberger Allee 273, 13055 Berlin, Alt-Hohenschönhausen",
+    "rooms": 3,
+    "rent": 870,
+    "size": 16,
+    "link": "https://www.howoge.de/immobiliensuche/wohnungssuche/detail/1940-33420-45.html",
+    "source": "Howoge",
+    "id": "howoge_landsberger_allee_273__13055_berlin__alt_hohensch_nhausen_3_zimmerwohnung__mit_wbs100_oder_140_",
+    "fetchedAt": "2026-04-20T13:45:02.335Z"
+  }
+]

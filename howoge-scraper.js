@@ -110,93 +110,81 @@ class HowogeScraper {
       // Wait for apartment listings to load
       console.log(`[${new Date().toISOString()}] [Howoge] Waiting for apartment listings...`);
       try {
-        await page.locator('[data-testid="property-item"]').first().waitFor({ timeout: 10000 });
+        await page.locator('.flat-single-grid-item').first().waitFor({ timeout: 10000 });
         console.log(`[${new Date().toISOString()}] [Howoge] Apartment listings found`);
       } catch (e) {
-        console.warn(`[${new Date().toISOString()}] [Howoge] ⚠️  Timeout waiting for listings, trying alternative selector...`);
-        // Try alternative selector
-        try {
-          await page.locator('.property-item').first().waitFor({ timeout: 10000 });
-          console.log(`[${new Date().toISOString()}] [Howoge] Apartment listings found (using alternative selector)`);
-        } catch (e2) {
-          console.warn(`[${new Date().toISOString()}] [Howoge] ⚠️  Timeout with alternative selector too, continuing anyway...`);
-        }
+        console.warn(`[${new Date().toISOString()}] [Howoge] ⚠️  Timeout waiting for listings, continuing anyway...`);
       }
 
       // Extract apartments using page.evaluate
       console.log(`[${new Date().toISOString()}] [Howoge] Extracting apartments...`);
       const apartments = await page.evaluate(() => {
         const results = [];
-
-        // Try multiple selectors to find property items
-        let listings = document.querySelectorAll('[data-testid="property-item"]');
-        if (listings.length === 0) {
-          listings = document.querySelectorAll('.property-item');
-        }
-        if (listings.length === 0) {
-          listings = document.querySelectorAll('.immo-element');
-        }
+        const listings = document.querySelectorAll('.flat-single-grid-item');
 
         let extracted = 0;
         let skipped = 0;
 
         listings.forEach((item) => {
           try {
-            // Extract text content for debugging
-            const fullText = item.textContent || '';
-
-            // Try to find address (usually in a heading or address element)
-            let address = '';
-            const addressEl = item.querySelector('[data-testid="property-address"]') ||
-                            item.querySelector('.property-address') ||
-                            item.querySelector('h3') ||
-                            item.querySelector('h2');
-            if (addressEl) {
-              address = addressEl.textContent?.trim() || '';
+            // Extract address from the address link
+            const addressLink = item.querySelector('.address a.flat-single--link');
+            if (!addressLink) {
+              skipped++;
+              return;
             }
 
-            // If no address found, try to extract from main content
-            if (!address) {
-              const lines = fullText.split('\n').map(l => l.trim()).filter(l => l.length > 0);
-              address = lines[0] || '';
-            }
+            const address = addressLink.textContent?.trim() || '';
+            const link = addressLink.href || '';
 
-            // Extract rooms
+            // Extract notice/title (e.g., "3-Zimmer-Wohnung (WBS 100-140)")
+            const noticeEl = item.querySelector('.notice');
+            const title = noticeEl?.textContent?.trim() || address;
+
+            // Extract rooms from notice text
             let rooms = 0;
-            const roomsMatch = fullText.match(/(\d+)\s*(?:zimmer|zi\.?|z\.?|bedroom|room)/i);
+            const roomsMatch = (noticeEl?.textContent || '').match(/(\d+)\s*-?Zimmer/i);
             if (roomsMatch) {
               rooms = parseInt(roomsMatch[1]);
             }
 
-            // Extract rent
+            // Extract rent from any element containing €
             let rent = 0;
-            const rentMatch = fullText.match(/€\s*(\d+(?:[.,]\d+)?)|(\d+(?:[.,]\d+)?)\s*€/);
-            if (rentMatch) {
-              const rentStr = (rentMatch[1] || rentMatch[2]).replace(',', '.');
-              rent = parseFloat(rentStr);
+            const fullText = item.textContent || '';
+            const allPriceMatches = fullText.match(/(\d+(?:[.,]\d+)?)\s*€/g);
+            if (allPriceMatches && allPriceMatches.length > 0) {
+              // Try to find the rent (usually the first price mentioned after warmmiete)
+              const rentMatches = fullText.match(/Warmmiete[^\d]*(\d+(?:[.,]\d+)?)/i);
+              if (rentMatches) {
+                rent = parseFloat(rentMatches[1].replace(',', '.'));
+              } else {
+                // Fallback: use the first price found
+                rent = parseFloat(allPriceMatches[0].replace(',', '.'));
+              }
             }
 
-            // Extract size in m²
+            // Extract size from details
             let size = 0;
-            const sizeMatch = fullText.match(/(\d+)\s*(?:m²|m2|qm)/i);
+            const sizeMatch = fullText.match(/(\d+)\s*m²/i);
             if (sizeMatch) {
               size = parseInt(sizeMatch[1]);
             }
 
-            // Extract link
-            let link = '';
-            const linkEl = item.querySelector('a');
-            if (linkEl) {
-              link = linkEl.href || '';
-            }
-
-            // Extract title (sometimes same as address, sometimes different)
-            let title = address;
-
-            // Only include if we have essential info
-            if (address && (rooms > 0 || rent > 0)) {
+            // Only include if we have essential info (address and rooms)
+            if (address && rooms > 0) {
               results.push({
-                title: title || 'Howoge Apartment',
+                title,
+                address,
+                rooms,
+                rent,
+                size,
+                link
+              });
+              extracted++;
+            } else if (address) {
+              // Include without rooms but with other details
+              results.push({
+                title,
                 address,
                 rooms,
                 rent,
