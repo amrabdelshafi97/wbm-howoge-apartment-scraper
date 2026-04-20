@@ -7,7 +7,7 @@
     "size": 30,
     "link": "https://www.wbm.de/wohnungen-berlin/angebote/details/2-zimmerdachgeschosswohnung-in-spandau/",
     "id": "pepitapromenade_29__13587_berlin_2_zimmerdachgescho_wohnung_in_spandau",
-    "fetchedAt": "2026-04-20T08:40:53.841Z"
+    "fetchedAt": "2026-04-20T08:50:57.411Z"
   },
   {
     "title": "3-Zimmer Dachgeschoßwohnung in Spandau",
@@ -17,7 +17,7 @@
     "size": 90,
     "link": "https://www.wbm.de/wohnungen-berlin/angebote/details/3-zimmer-dachgeschosswohnung-in-spandau-1/",
     "id": "goltzstrasse_52__13587_berlin_3_zimmer_dachgescho_wohnung_in_spandau",
-    "fetchedAt": "2026-04-20T08:40:53.841Z"
+    "fetchedAt": "2026-04-20T08:50:57.412Z"
   },
   {
     "title": "3-Zimmer-Wohnung in Spandau",
@@ -27,17 +27,7 @@
     "size": 18,
     "link": "https://www.wbm.de/wohnungen-berlin/angebote/details/3-zimmer-wohnung-in-spandau-2/",
     "id": "pepitapromenade_9__13587_berlin_3_zimmer_wohnung_in_spandau",
-    "fetchedAt": "2026-04-20T08:40:53.841Z"
-  },
-  {
-    "title": "WBS 160/180/220 - Wohnkomfort pur - Lichtdurchflutete 3 Zimmer mit Balkon",
-    "address": "Eidechsenweg 9, 13591 Berlin",
-    "rooms": 3,
-    "rent": 1.112,
-    "size": 75,
-    "link": "https://www.wbm.de/wohnungen-berlin/angebote/details/wbs-160-180-220-wohnkomfort-pur-lichtdurchflutete-3-zimmer-mit-balkon/",
-    "id": "eidechsenweg_9__13591_berlin_wbs_160_180_220___wohnkomfort_pur___lichtdurchflutete_3_zimmer_mit_balkon",
-    "fetchedAt": "2026-04-20T08:40:53.841Z"
+    "fetchedAt": "2026-04-20T08:50:57.412Z"
   },
   {
     "title": "2-Zimmer-Wohnung in Friedrichshain",
@@ -47,6 +37,26 @@
     "size": 34,
     "link": "https://www.wbm.de/wohnungen-berlin/angebote/details/2-zimmer-wohnung-in-friedrichshain/",
     "id": "eckertstrasse_2b__10249_berlin_2_zimmer_wohnung_in_friedrichshain",
-    "fetchedAt": "2026-04-20T08:40:53.841Z"
+    "fetchedAt": "2026-04-20T08:50:57.412Z"
+  },
+  {
+    "title": "1-Zimmer-Wohnung mit WBS 100/140",
+    "address": "Heinrich-Heine-Strasse 9B, 10179 Berlin",
+    "rooms": 1,
+    "rent": 373.04,
+    "size": 17,
+    "link": "https://www.wbm.de/wohnungen-berlin/angebote/details/1-zimmer-wohnung-mit-wbs-100-140/",
+    "id": "heinrich_heine_strasse_9b__10179_berlin_1_zimmer_wohnung_mit_wbs_100_140",
+    "fetchedAt": "2026-04-20T08:50:57.412Z"
+  },
+  {
+    "title": "2-Zimmertraum in Pankow",
+    "address": "Neukirchstrasse 3, 13089 Berlin",
+    "rooms": 2,
+    "rent": 1.256,
+    "size": 57,
+    "link": "https://www.wbm.de/wohnungen-berlin/angebote/details/2-zimmertraum-in-pankow/",
+    "id": "neukirchstrasse_3__13089_berlin_2_zimmertraum_in_pankow",
+    "fetchedAt": "2026-04-20T08:50:57.412Z"
   }
 ]
