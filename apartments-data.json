@@ -7,7 +7,7 @@
     "size": 30,
     "link": "https://www.wbm.de/wohnungen-berlin/angebote/details/2-zimmerdachgeschosswohnung-in-spandau/",
     "id": "pepitapromenade_29__13587_berlin_2_zimmerdachgescho_wohnung_in_spandau",
-    "fetchedAt": "2026-04-20T09:11:02.921Z"
+    "fetchedAt": "2026-04-20T09:21:03.649Z"
   },
   {
     "title": "3-Zimmer Dachgeschoßwohnung in Spandau",
@@ -17,7 +17,7 @@
     "size": 90,
     "link": "https://www.wbm.de/wohnungen-berlin/angebote/details/3-zimmer-dachgeschosswohnung-in-spandau-1/",
     "id": "goltzstrasse_52__13587_berlin_3_zimmer_dachgescho_wohnung_in_spandau",
-    "fetchedAt": "2026-04-20T09:11:02.921Z"
+    "fetchedAt": "2026-04-20T09:21:03.649Z"
   },
   {
     "title": "3-Zimmer-Wohnung in Spandau",
@@ -27,7 +27,7 @@
     "size": 18,
     "link": "https://www.wbm.de/wohnungen-berlin/angebote/details/3-zimmer-wohnung-in-spandau-2/",
     "id": "pepitapromenade_9__13587_berlin_3_zimmer_wohnung_in_spandau",
-    "fetchedAt": "2026-04-20T09:11:02.921Z"
+    "fetchedAt": "2026-04-20T09:21:03.649Z"
   },
   {
     "title": "2-Zimmer-Wohnung in Friedrichshain",
@@ -37,17 +37,7 @@
     "size": 34,
     "link": "https://www.wbm.de/wohnungen-berlin/angebote/details/2-zimmer-wohnung-in-friedrichshain/",
     "id": "eckertstrasse_2b__10249_berlin_2_zimmer_wohnung_in_friedrichshain",
-    "fetchedAt": "2026-04-20T09:11:02.921Z"
-  },
-  {
-    "title": "1-Zimmer-Wohnung mit WBS 100/140",
-    "address": "Heinrich-Heine-Strasse 9B, 10179 Berlin",
-    "rooms": 1,
-    "rent": 373.04,
-    "size": 17,
-    "link": "https://www.wbm.de/wohnungen-berlin/angebote/details/1-zimmer-wohnung-mit-wbs-100-140/",
-    "id": "heinrich_heine_strasse_9b__10179_berlin_1_zimmer_wohnung_mit_wbs_100_140",
-    "fetchedAt": "2026-04-20T09:11:02.921Z"
+    "fetchedAt": "2026-04-20T09:21:03.649Z"
   },
   {
     "title": "2-Zimmertraum in Pankow",
@@ -57,6 +47,26 @@
     "size": 57,
     "link": "https://www.wbm.de/wohnungen-berlin/angebote/details/2-zimmertraum-in-pankow/",
     "id": "neukirchstrasse_3__13089_berlin_2_zimmertraum_in_pankow",
-    "fetchedAt": "2026-04-20T09:11:02.921Z"
+    "fetchedAt": "2026-04-20T09:21:03.649Z"
+  },
+  {
+    "title": "2-Zimmer-Wohnung mit WBS 100/140",
+    "address": "Friedenstrasse 90, 10249 Berlin",
+    "rooms": 2,
+    "rent": 443.69,
+    "size": 1,
+    "link": "https://www.wbm.de/wohnungen-berlin/angebote/details/2-zimmer-wohnung-mit-wbs-100-140/",
+    "id": "friedenstrasse_90__10249_berlin_2_zimmer_wohnung_mit_wbs_100_140",
+    "fetchedAt": "2026-04-20T09:21:03.649Z"
+  },
+  {
+    "title": "2-Zimmer-Wohnung in Friedrichshain",
+    "address": "Friedenstrasse 86, 10249 Berlin",
+    "rooms": 2,
+    "rent": 1.218,
+    "size": 49,
+    "link": "https://www.wbm.de/wohnungen-berlin/angebote/details/2-zimmer-wohnung-in-friedrichshain-1/",
+    "id": "friedenstrasse_86__10249_berlin_2_zimmer_wohnung_in_friedrichshain",
+    "fetchedAt": "2026-04-20T09:21:03.649Z"
   }
 ]
