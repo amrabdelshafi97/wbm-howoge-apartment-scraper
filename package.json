@@ -2,11 +2,11 @@
   "name": "wbm-apartment-scraper",
   "version": "1.0.0",
   "description": "Background service to monitor and notify about new 3-room apartments under €1200 in Berlin",
-  "main": "apartment-scraper.js",
+  "main": "wbm-scraper.js",
   "type": "commonjs",
   "scripts": {
-    "start": "node apartment-scraper.js",
-    "dev": "nodemon apartment-scraper.js"
+    "start": "node wbm-scraper.js",
+    "dev": "nodemon wbm-scraper.js"
   },
   "dependencies": {
     "axios": "^1.6.0",

@@ -14,7 +14,7 @@ const CONFIG = {
   url: 'https://www.wbm.de/wohnungen-berlin/angebote/'
 };
 
-class ApartmentScraper {
+class WBMScraper {
   constructor(config = {}) {
     this.config = { ...CONFIG, ...config };
     this.lastResults = this.loadData();
@@ -25,15 +25,15 @@ class ApartmentScraper {
     this.telegramToken = process.env.TELEGRAM_BOT_TOKEN;
     this.telegramChatId = process.env.TELEGRAM_CHAT_ID;
 
-    console.log(`[${new Date().toISOString()}] [DEBUG] Environment variables check:`);
-    console.log(`[${new Date().toISOString()}] [DEBUG] NODE_ENV = ${process.env.NODE_ENV}`);
-    console.log(`[${new Date().toISOString()}] [DEBUG] TELEGRAM_BOT_TOKEN exists: ${!!this.telegramToken} (length: ${this.telegramToken?.length || 0})`);
-    console.log(`[${new Date().toISOString()}] [DEBUG] TELEGRAM_CHAT_ID exists: ${!!this.telegramChatId} (value: ${this.telegramChatId || 'undefined'})`);
+    console.log(`[${new Date().toISOString()}] [WBM] Environment variables check:`);
+    console.log(`[${new Date().toISOString()}] [WBM] NODE_ENV = ${process.env.NODE_ENV}`);
+    console.log(`[${new Date().toISOString()}] [WBM] TELEGRAM_BOT_TOKEN exists: ${!!this.telegramToken} (length: ${this.telegramToken?.length || 0})`);
+    console.log(`[${new Date().toISOString()}] [WBM] TELEGRAM_CHAT_ID exists: ${!!this.telegramChatId} (value: ${this.telegramChatId || 'undefined'})`);
 
     if (!this.telegramToken || !this.telegramChatId) {
-      console.warn(`[${new Date().toISOString()}] ⚠️  Telegram credentials not configured. Set TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID env vars.`);
+      console.warn(`[${new Date().toISOString()}] [WBM] ⚠️  Telegram credentials not configured. Set TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID env vars.`);
     } else {
-      console.log(`[${new Date().toISOString()}] ✅ Telegram notifications enabled`);
+      console.log(`[${new Date().toISOString()}] [WBM] ✅ Telegram notifications enabled`);
     }
   }
 
@@ -44,7 +44,7 @@ class ApartmentScraper {
         return JSON.parse(data);
       }
     } catch (error) {
-      console.error('Error loading data:', error.message);
+      console.error(`[${new Date().toISOString()}] [WBM] Error loading data:`, error.message);
     }
     return [];
   }
@@ -53,7 +53,7 @@ class ApartmentScraper {
     try {
       fs.writeFileSync(this.config.dataFile, JSON.stringify(data, null, 2));
     } catch (error) {
-      console.error('Error saving data:', error.message);
+      console.error(`[${new Date().toISOString()}] [WBM] Error saving data:`, error.message);
     }
   }
 
@@ -65,7 +65,7 @@ class ApartmentScraper {
           try {
             const { execSync } = require('child_process');
             execSync('pkill -9 chromium || true', { stdio: 'ignore' });
-            console.log(`[${new Date().toISOString()}] Force-killed zombie chromium processes`);
+            console.log(`[${new Date().toISOString()}] [WBM] Force-killed zombie chromium processes`);
             // Longer delay to ensure processes are fully reaped by OS
             await new Promise(resolve => setTimeout(resolve, 2000));
           } catch (e) {
@@ -75,14 +75,14 @@ class ApartmentScraper {
 
         return await chromium.launch(options);
       } catch (error) {
-        console.error(`[${new Date().toISOString()}] Browser launch failed (attempt ${attempt}/${maxRetries}): ${error.message}`);
+        console.error(`[${new Date().toISOString()}] [WBM] Browser launch failed (attempt ${attempt}/${maxRetries}): ${error.message}`);
 
         if (attempt === maxRetries) {
           throw error;
         }
 
         const delay = Math.pow(2, attempt) * 1000;
-        console.error(`[${new Date().toISOString()}] Retrying in ${delay}ms...`);
+        console.error(`[${new Date().toISOString()}] [WBM] Retrying in ${delay}ms...`);
         await new Promise(resolve => setTimeout(resolve, delay));
       }
     }
@@ -94,9 +94,9 @@ class ApartmentScraper {
     let page;
 
     try {
-      console.log(`[${new Date().toISOString()}] Fetching apartments from WBM...`);
+      console.log(`[${new Date().toISOString()}] [WBM] Fetching apartments from WBM...`);
 
-      console.log(`[${new Date().toISOString()}] Launching browser...`);
+      console.log(`[${new Date().toISOString()}] [WBM] Launching browser...`);
 
       // Try to use system Chromium if available, otherwise use downloaded version
       let launchOptions = {
@@ -110,31 +110,31 @@ class ApartmentScraper {
       }
 
       browser = await this.launchBrowserWithRetry(launchOptions);
-      console.log(`[${new Date().toISOString()}] Browser launched successfully`);
+      console.log(`[${new Date().toISOString()}] [WBM] Browser launched successfully`);
 
       context = await browser.newContext();
       page = await context.newPage();
-      console.log(`[${new Date().toISOString()}] Context and page created`);
+      console.log(`[${new Date().toISOString()}] [WBM] Context and page created`);
 
-      console.log(`[${new Date().toISOString()}] Loading page: ${this.config.url}`);
+      console.log(`[${new Date().toISOString()}] [WBM] Loading page: ${this.config.url}`);
       await page.goto(this.config.url, { waitUntil: 'networkidle', timeout: 30000 });
-      console.log(`[${new Date().toISOString()}] Page loaded successfully`);
+      console.log(`[${new Date().toISOString()}] [WBM] Page loaded successfully`);
 
       // Wait for apartment listings to load
-      console.log(`[${new Date().toISOString()}] Waiting for apartment listings...`);
+      console.log(`[${new Date().toISOString()}] [WBM] Waiting for apartment listings...`);
       try {
         await page.locator('article.immo-element').first().waitFor({ timeout: 10000 });
-        console.log(`[${new Date().toISOString()}] Apartment listings found`);
+        console.log(`[${new Date().toISOString()}] [WBM] Apartment listings found`);
       } catch (e) {
-        console.warn(`[${new Date().toISOString()}] ⚠️  Timeout waiting for listings, continuing anyway... Error: ${e.message}`);
+        console.warn(`[${new Date().toISOString()}] [WBM] ⚠️  Timeout waiting for listings, continuing anyway... Error: ${e.message}`);
       }
 
       // First check if elements exist
       const count = await page.locator('article.immo-element').count();
-      console.log(`[${new Date().toISOString()}] Before evaluate: found ${count} immo-element articles on page`);
+      console.log(`[${new Date().toISOString()}] [WBM] Before evaluate: found ${count} immo-element articles on page`);
 
       // Extract apartments using page.evaluate with debugging
-      console.log(`[${new Date().toISOString()}] Extracting apartments...`);
+      console.log(`[${new Date().toISOString()}] [WBM] Extracting apartments...`);
       const apartments = await page.evaluate(() => {
         const results = [];
         const listings = document.querySelectorAll('article.immo-element:not(.teaserBox)');
@@ -194,9 +194,9 @@ class ApartmentScraper {
       const stats = apartments.stats;
 
       if (stats) {
-        console.log(`[${new Date().toISOString()}] Stats: Found ${stats.total} total articles, extracted ${stats.extracted}, missing fields ${stats.missingFields}, skipped ${stats.skipped}`);
+        console.log(`[${new Date().toISOString()}] [WBM] Stats: Found ${stats.total} total articles, extracted ${stats.extracted}, missing fields ${stats.missingFields}, skipped ${stats.skipped}`);
       }
-      console.log(`[${new Date().toISOString()}] Found ${apartmentsList.length} valid apartments`);
+      console.log(`[${new Date().toISOString()}] [WBM] Found ${apartmentsList.length} valid apartments`);
 
       await context.close();
       await browser.close();
@@ -209,14 +209,14 @@ class ApartmentScraper {
       }));
 
     } catch (error) {
-      console.error(`[${new Date().toISOString()}] ❌ Error fetching apartments:`, error.message);
-      console.error(`[${new Date().toISOString()}] Error stack:`, error.stack);
+      console.error(`[${new Date().toISOString()}] [WBM] ❌ Error fetching apartments:`, error.message);
+      console.error(`[${new Date().toISOString()}] [WBM] Error stack:`, error.stack);
       try {
         if (page) await page.close();
         if (context) await context.close();
         if (browser) await browser.close();
       } catch (e) {
-        console.error(`[${new Date().toISOString()}] Error during cleanup:`, e.message);
+        console.error(`[${new Date().toISOString()}] [WBM] Error during cleanup:`, e.message);
       }
       return [];
     }
@@ -234,32 +234,32 @@ class ApartmentScraper {
   findNewApartments(currentList) {
     const lastIds = new Set(this.lastResults.map(apt => apt.id));
     const newApts = currentList.filter(apt => !lastIds.has(apt.id));
-    console.log(`Found ${currentList.length} total apartments, ${newApts.length} are new (${lastIds.size} already seen)`);
+    console.log(`[${new Date().toISOString()}] [WBM] Found ${currentList.length} total apartments, ${newApts.length} are new (${lastIds.size} already seen)`);
     return newApts;
   }
 
   async sendTelegramNotification(message) {
     if (!this.telegramToken || !this.telegramChatId) {
-      console.warn('⚠️  Telegram credentials not set');
+      console.warn(`[${new Date().toISOString()}] [WBM] ⚠️  Telegram credentials not set`);
       return;
     }
 
     try {
       const url = `https://api.telegram.org/bot${this.telegramToken}/sendMessage`;
-      console.log('📤 Sending Telegram notification...');
+      console.log(`[${new Date().toISOString()}] [WBM] 📤 Sending Telegram notification...`);
       const response = await axios.post(url, {
         chat_id: this.telegramChatId,
         text: message,
         parse_mode: 'HTML'
       });
-      console.log('✅ Telegram notification sent successfully');
+      console.log(`[${new Date().toISOString()}] [WBM] ✅ Telegram notification sent successfully`);
     } catch (error) {
-      console.error('❌ Error sending Telegram notification:', error.response?.data || error.message);
+      console.error(`[${new Date().toISOString()}] [WBM] ❌ Error sending Telegram notification:`, error.response?.data || error.message);
     }
   }
 
   formatApartmentMessage(apartment) {
-    return `<b>🏠 New Apartment Found!</b>
+    return `<b>🏠 New Apartment Found - WBM!</b>
 
 <b>Address:</b> ${this.escapeHtml(apartment.address)}
 <b>Rooms:</b> ${apartment.rooms}
@@ -274,7 +274,7 @@ class ApartmentScraper {
       .map(apt => `• ${apt.rooms}R | €${apt.rent} | ${apt.size}m² | ${apt.address}`)
       .join('\n');
 
-    return `<b>🏠 ${apartments.length} New Apartment(s) Found!</b>
+    return `<b>🏠 ${apartments.length} New Apartment(s) Found - WBM!</b>
 
 ${details}`;
   }
@@ -285,22 +285,22 @@ ${details}`;
 
   async sendNotification(newApartments) {
     if (newApartments.length === 0) {
-      console.log('No new apartments to notify');
+      console.log(`[${new Date().toISOString()}] [WBM] No new apartments to notify`);
       return;
     }
 
-    console.log(`\n🔔 Sending notifications for ${newApartments.length} new apartments...`);
+    console.log(`[${new Date().toISOString()}] [WBM] 🔔 Sending notifications for ${newApartments.length} new apartments...`);
 
     const consoleOutput = this.formatConsoleOutput(newApartments);
     console.log(consoleOutput);
 
     // Send summary message
     const summaryMessage = this.formatSummaryMessage(newApartments);
-    console.log('Sending summary message...');
+    console.log(`[${new Date().toISOString()}] [WBM] Sending summary message...`);
     await this.sendTelegramNotification(summaryMessage);
 
     // Send individual notifications for each apartment
-    console.log(`Sending ${newApartments.length} individual notifications...`);
+    console.log(`[${new Date().toISOString()}] [WBM] Sending ${newApartments.length} individual notifications...`);
     for (const apt of newApartments) {
       const aptMessage = this.formatApartmentMessage(apt);
       await this.sendTelegramNotification(aptMessage);
@@ -308,12 +308,12 @@ ${details}`;
       await new Promise(resolve => setTimeout(resolve, 500));
     }
 
-    console.log('✅ All notifications sent!');
+    console.log(`[${new Date().toISOString()}] [WBM] ✅ All notifications sent!`);
   }
 
 
   formatConsoleOutput(apartments) {
-    const header = `\n${'='.repeat(80)}\n🏠 NEW APARTMENTS FOUND\n${'='.repeat(80)}\n`;
+    const header = `\n${'='.repeat(80)}\n🏠 NEW APARTMENTS FOUND - WBM\n${'='.repeat(80)}\n`;
     const rows = apartments
       .map(apt => `  ${apt.rooms}R | €${apt.rent} | ${apt.size}m² | ${apt.address}`)
       .join('\n');
@@ -322,34 +322,34 @@ ${details}`;
 
   async run() {
     try {
-      console.log(`\n[${new Date().toISOString()}] ========== SCRAPER RUN START ==========`);
+      console.log(`\n[${new Date().toISOString()}] [WBM] ========== SCRAPER RUN START ==========`);
 
       const apartments = await this.fetchApartments();
-      console.log(`[${new Date().toISOString()}] Total apartments fetched: ${apartments.length}`);
+      console.log(`[${new Date().toISOString()}] [WBM] Total apartments fetched: ${apartments.length}`);
 
       const filteredApartments = this.filterApartments(apartments);
-      console.log(`[${new Date().toISOString()}] After filtering: ${filteredApartments.length} apartments`);
+      console.log(`[${new Date().toISOString()}] [WBM] After filtering: ${filteredApartments.length} apartments`);
 
       const newApartments = this.findNewApartments(filteredApartments);
-      console.log(`[${new Date().toISOString()}] New apartments found: ${newApartments.length}`);
+      console.log(`[${new Date().toISOString()}] [WBM] New apartments found: ${newApartments.length}`);
 
       if (newApartments.length > 0) {
         await this.sendNotification(newApartments);
       } else {
-        console.log(`[${new Date().toISOString()}] ℹ️  No new apartments found. (Total: ${filteredApartments.length})`);
+        console.log(`[${new Date().toISOString()}] [WBM] ℹ️  No new apartments found. (Total: ${filteredApartments.length})`);
       }
 
       this.lastResults = filteredApartments;
       this.saveData(filteredApartments);
 
-      console.log(`[${new Date().toISOString()}] ========== SCRAPER RUN END ==========\n`);
+      console.log(`[${new Date().toISOString()}] [WBM] ========== SCRAPER RUN END ==========\n`);
     } catch (error) {
-      console.error(`[${new Date().toISOString()}] ❌ CRITICAL ERROR in scraper run:`, error);
+      console.error(`[${new Date().toISOString()}] [WBM] ❌ CRITICAL ERROR in scraper run:`, error);
     }
   }
 
   start() {
-    console.log(`🚀 Apartment Scraper started!`);
+    console.log(`🚀 WBM Scraper started!`);
     console.log(`   Mode: Notifying ALL new apartments found`);
     console.log(`   Check interval: ${this.config.checkInterval}`);
     console.log(`   Data file: ${this.config.dataFile}\n`);
@@ -366,7 +366,7 @@ ${details}`;
 
 class ScraperOrchestrator {
   constructor() {
-    this.wbmScraper = new ApartmentScraper();
+    this.wbmScraper = new WBMScraper();
     this.howogeScraper = new HowogeScraper();
     this.checkInterval = CONFIG.checkInterval;
   }
@@ -402,13 +402,13 @@ class ScraperOrchestrator {
 }
 
 // Export for use as module
-module.exports = ApartmentScraper;
+module.exports = WBMScraper;
 module.exports.ScraperOrchestrator = ScraperOrchestrator;
 
 // Run as standalone service
 if (require.main === module) {
   try {
-    console.log(`[${new Date().toISOString()}] 🚀 Starting Apartment Scraper Service...`);
+    console.log(`[${new Date().toISOString()}] 🚀 Starting Scraper Orchestrator...`);
     const orchestrator = new ScraperOrchestrator();
     orchestrator.start();
 
