@@ -107,7 +107,7 @@ class WBMScraper extends BaseScraper {
 
       return apartmentsList.map(apt => ({
         ...apt,
-        id: this.generateId(apt.address, apt.title),
+        id: this.generateId(apt.address, apt.title, apt.link),
         fetchedAt: this.timestamp()
       }));
 

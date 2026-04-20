@@ -154,8 +154,22 @@ class BaseScraper {
     this.browser = null;
   }
 
-  generateId(address, title) {
+  /**
+   * Generate stable ID from apartment data.
+   * Can use link (recommended) or address+title.
+   * Link is more stable across scrape runs.
+   */
+  generateId(address, title, link = null) {
     const source = this.getSourceName().toLowerCase();
+
+    // If link is provided, use it for better stability
+    if (link) {
+      // Extract the ID from the link if available (e.g., from URL)
+      // or use the full link as the basis
+      return `${source}-${link}`.replace(/[^a-z0-9]/gi, '_').toLowerCase();
+    }
+
+    // Fallback to address+title if no link provided
     return `${source}-${address}-${title}`.replace(/[^a-z0-9]/gi, '_').toLowerCase();
   }
 
