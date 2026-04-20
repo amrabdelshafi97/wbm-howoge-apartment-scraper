@@ -288,27 +288,27 @@ class HowogeScraper {
   findNewApartments(currentList) {
     const lastIds = new Set(this.lastResults.map(apt => apt.id));
     const newApts = currentList.filter(apt => !lastIds.has(apt.id));
-    console.log(`[Howoge] Found ${currentList.length} total apartments, ${newApts.length} are new (${lastIds.size} already seen)`);
+    console.log(`[${new Date().toISOString()}] [Howoge] Found ${currentList.length} total apartments, ${newApts.length} are new (${lastIds.size} already seen)`);
     return newApts;
   }
 
   async sendTelegramNotification(message) {
     if (!this.telegramToken || !this.telegramChatId) {
-      console.warn('[Howoge] ⚠️  Telegram credentials not set');
+      console.warn(`[${new Date().toISOString()}] [Howoge] ⚠️  Telegram credentials not set`);
       return;
     }
 
     try {
       const url = `https://api.telegram.org/bot${this.telegramToken}/sendMessage`;
-      console.log('[Howoge] 📤 Sending Telegram notification...');
+      console.log(`[${new Date().toISOString()}] [Howoge] 📤 Sending Telegram notification...`);
       await axios.post(url, {
         chat_id: this.telegramChatId,
         text: message,
         parse_mode: 'HTML'
       });
-      console.log('[Howoge] ✅ Telegram notification sent successfully');
+      console.log(`[${new Date().toISOString()}] [Howoge] ✅ Telegram notification sent successfully`);
     } catch (error) {
-      console.error('[Howoge] ❌ Error sending Telegram notification:', error.response?.data || error.message);
+      console.error(`[${new Date().toISOString()}] [Howoge] ❌ Error sending Telegram notification:`, error.response?.data || error.message);
     }
   }
 
@@ -339,22 +339,22 @@ ${details}`;
 
   async sendNotification(newApartments) {
     if (newApartments.length === 0) {
-      console.log('[Howoge] No new apartments to notify');
+      console.log(`[${new Date().toISOString()}] [Howoge] No new apartments to notify`);
       return;
     }
 
-    console.log(`\n[Howoge] 🔔 Sending notifications for ${newApartments.length} new apartments...`);
+    console.log(`[${new Date().toISOString()}] [Howoge] 🔔 Sending notifications for ${newApartments.length} new apartments...`);
 
     const consoleOutput = this.formatConsoleOutput(newApartments);
     console.log(consoleOutput);
 
     // Send summary message
     const summaryMessage = this.formatSummaryMessage(newApartments);
-    console.log('[Howoge] Sending summary message...');
+    console.log(`[${new Date().toISOString()}] [Howoge] Sending summary message...`);
     await this.sendTelegramNotification(summaryMessage);
 
     // Send individual notifications for each apartment
-    console.log(`[Howoge] Sending ${newApartments.length} individual notifications...`);
+    console.log(`[${new Date().toISOString()}] [Howoge] Sending ${newApartments.length} individual notifications...`);
     for (const apt of newApartments) {
       const aptMessage = this.formatApartmentMessage(apt);
       await this.sendTelegramNotification(aptMessage);
@@ -362,7 +362,7 @@ ${details}`;
       await new Promise(resolve => setTimeout(resolve, 500));
     }
 
-    console.log('[Howoge] ✅ All notifications sent!');
+    console.log(`[${new Date().toISOString()}] [Howoge] ✅ All notifications sent!`);
   }
 
   formatConsoleOutput(apartments) {
