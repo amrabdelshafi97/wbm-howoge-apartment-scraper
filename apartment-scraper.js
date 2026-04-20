@@ -403,6 +403,7 @@ class ScraperOrchestrator {
 
 // Export for use as module
 module.exports = ApartmentScraper;
+module.exports.ScraperOrchestrator = ScraperOrchestrator;
 
 // Run as standalone service
 if (require.main === module) {
