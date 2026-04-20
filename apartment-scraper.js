@@ -4,6 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const schedule = require('node-schedule');
 const { chromium } = require('playwright');
+const HowogeScraper = require('./howoge-scraper');
 
 const CONFIG = {
   targetRooms: 3,
@@ -363,6 +364,43 @@ ${details}`;
   }
 }
 
+class ScraperOrchestrator {
+  constructor() {
+    this.wbmScraper = new ApartmentScraper();
+    this.howogeScraper = new HowogeScraper();
+    this.checkInterval = CONFIG.checkInterval;
+  }
+
+  async runAllScrapers() {
+    console.log(`\n[${new Date().toISOString()}] 🔄 Running all apartment scrapers...`);
+
+    // Run both scrapers in parallel
+    try {
+      await Promise.all([
+        this.wbmScraper.run(),
+        this.howogeScraper.run()
+      ]);
+    } catch (error) {
+      console.error(`[${new Date().toISOString()}] ❌ Error running scrapers:`, error);
+    }
+  }
+
+  start() {
+    console.log(`🚀 Apartment Scraper Orchestrator started!`);
+    console.log(`   Scrapers: WBM Berlin, Howoge`);
+    console.log(`   Check interval: ${this.checkInterval}`);
+    console.log(`   Data files: apartments-data.json, howoge-data.json\n`);
+
+    // Run immediately
+    this.runAllScrapers();
+
+    // Schedule recurring checks
+    schedule.scheduleJob(this.checkInterval, () => {
+      this.runAllScrapers();
+    });
+  }
+}
+
 // Export for use as module
 module.exports = ApartmentScraper;
 
@@ -370,8 +408,8 @@ module.exports = ApartmentScraper;
 if (require.main === module) {
   try {
     console.log(`[${new Date().toISOString()}] 🚀 Starting Apartment Scraper Service...`);
-    const scraper = new ApartmentScraper();
-    scraper.start();
+    const orchestrator = new ScraperOrchestrator();
+    orchestrator.start();
 
     // Log unhandled rejections
     process.on('unhandledRejection', (reason, promise) => {

@@ -1,14 +1,15 @@
 # WBM Apartment Scraper
 
-A background service that monitors WBM Berlin apartments and notifies you when new 3-room apartments under €1200/month become available.
+A background service that monitors multiple apartment sources in Berlin and notifies you when new apartments matching your criteria become available.
 
 ## Features
 
-- 🔍 **Automatic Scraping**: Checks WBM listings every 5 minutes (configurable)
+- 🔍 **Multi-Source Scraping**: Monitors both WBM Berlin and Howoge apartments
 - 📱 **Telegram Notifications**: Get notified via Telegram when NEW apartments match your criteria
-- 💾 **Data Persistence**: Tracks previous results to detect only new listings
-- 🎯 **Filtered Results**: Only shows 3-room apartments under €1200
+- 💾 **Data Persistence**: Tracks previous results for each source to detect only new listings
+- 🎯 **Filtered Results**: Customizable filters (rooms, maximum rent)
 - 📊 **Diff Detection**: Only notifies on NEW listings, never duplicates
+- ⚡ **Parallel Execution**: Scrapes multiple sources simultaneously for efficiency
 
 ## Setup
 
@@ -94,15 +95,30 @@ sudo systemctl status apartment-scraper
 
 ## Configuration
 
+### WBM Configuration
+
 Edit the CONFIG object in `apartment-scraper.js`:
 
 ```javascript
 const CONFIG = {
   targetRooms: 3,              // Number of rooms to filter
   maxRent: 1200,               // Maximum rent in euros
-  checkInterval: '*/30 * * * *', // Cron format (every 30 min)
+  checkInterval: '*/5 * * * *', // Cron format (every 5 min)
   dataFile: 'apartments-data.json', // Where to store results
   url: 'https://www.wbm.de/wohnungen-berlin/angebote/'
+};
+```
+
+### Howoge Configuration
+
+Edit the configuration in `howoge-scraper.js`:
+
+```javascript
+const DEFAULT_CONFIG = {
+  targetRooms: 3,              // Number of rooms to filter
+  maxRent: 1200,               // Maximum rent in euros
+  dataFile: 'howoge-data.json', // Where to store Howoge results
+  url: 'https://www.howoge.de/immobiliensuche/wohnungssuche.html?...'
 };
 ```
 
@@ -114,16 +130,27 @@ const CONFIG = {
 
 ## Data Storage
 
-Results are saved to `apartments-data.json`. This file tracks all apartments that match your criteria, allowing the service to detect new listings.
+Results are saved to separate JSON files for each source:
+
+- **`apartments-data.json`**: WBM Berlin apartment listings
+- **`howoge-data.json`**: Howoge apartment listings
+
+Each file tracks all apartments from that source that match your criteria, allowing the service to detect new listings.
 
 ## Notifications
 
-The service sends two types of Telegram messages:
+The service sends two types of Telegram messages per source:
 
 1. **Summary Message**: Shows all new apartments found at once
 2. **Individual Messages**: Detailed message for each apartment with link to listing
 
-Messages are formatted with apartment details (address, rooms, size, rent, link).
+Messages are formatted with apartment details (address, rooms, size, rent, link) and include the source (WBM or Howoge).
+
+### Notification Timing
+
+- Both scrapers run in parallel on the schedule (default: every 5 minutes)
+- Separate notifications for each source
+- Notifications are sent immediately when new apartments are detected
 
 ## Troubleshooting
 
@@ -139,8 +166,20 @@ Messages are formatted with apartment details (address, rooms, size, rent, link)
 - Check the website to see how apartments are currently displayed
 
 **How to test manually?**
+
+Test both scrapers:
 ```bash
 node apartment-scraper.js
+```
+
+Test Howoge scraper specifically:
+```bash
+node test-howoge.js
+```
+
+Test WBM scraper specifically:
+```bash
+node debug.js
 ```
 
 ## License
