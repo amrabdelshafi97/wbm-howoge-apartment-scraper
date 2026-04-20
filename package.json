@@ -6,7 +6,8 @@
   "type": "commonjs",
   "scripts": {
     "start": "node wbm-scraper.js",
-    "dev": "nodemon wbm-scraper.js"
+    "dev": "nodemon wbm-scraper.js",
+    "scrape": "node run-scraper.js"
   },
   "dependencies": {
     "axios": "^1.6.0",
