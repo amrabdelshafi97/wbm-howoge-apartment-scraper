@@ -11,27 +11,72 @@ A background service that monitors multiple apartment sources in Berlin and noti
 - 📊 **Diff Detection**: Only notifies on NEW listings, never duplicates
 - ⚡ **Parallel Execution**: Scrapes multiple sources simultaneously for efficiency
 
-## Setup
+## Quick Start
 
-### 1. Install Dependencies
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/amrabdelshafi97/wbm-apartment-scraper.git
+cd wbm-apartment-scraper
+```
+
+### 2. Install Dependencies
 
 ```bash
 npm install
 ```
 
-### 2. Configure Telegram Bot
+### 3. Configure Telegram Bot
 
-First, get your Telegram Bot Token and Chat ID:
+#### Step 1: Create a Telegram Bot with BotFather
 
-1. **Create a Telegram Bot**:
-   - Open Telegram and search for `@BotFather`
-   - Send `/newbot` and follow the prompts
-   - You'll get a bot token: `123456789:ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefgh`
+1. Open **Telegram** on your phone or web app
+2. Search for **`@BotFather`** (official Telegram bot creator)
+3. Click on it and press **Start**
+4. Send the command: `/newbot`
+5. BotFather will ask for a name for your bot (e.g., "Apartment Scraper Bot")
+6. BotFather will ask for a username (must end with "bot", e.g., "apartment_scraper_bot")
+7. BotFather will respond with:
+   ```
+   Done! Congratulations on your new bot. You will find it at t.me/your_bot_username.
+   You can now add a description, about section and commands for your bot.
 
-2. **Get your Chat ID**:
-   - Send any message to your bot
-   - Visit `https://api.telegram.org/bot<YOUR_TOKEN>/getUpdates` (replace `<YOUR_TOKEN>`)
-   - Look for `"chat":{"id":123456789}` - that's your chat ID
+   Use this token to access the HTTP API:
+   123456789:ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefgh
+   ```
+8. **Copy this token** - you'll need it for your `.env` file
+
+#### Step 2: Get Your Chat ID
+
+1. Search for your newly created bot (use the username from above)
+2. Click **Start** to initialize the chat
+3. Send any message to your bot (e.g., "hello")
+4. Go to this URL in your browser:
+   ```
+   https://api.telegram.org/bot<YOUR_TOKEN>/getUpdates
+   ```
+   (Replace `<YOUR_TOKEN>` with the token from BotFather)
+5. You'll see JSON output. Look for:
+   ```json
+   {
+     "ok": true,
+     "result": [
+       {
+         "update_id": 123456789,
+         "message": {
+           "message_id": 1,
+           "from": {
+             "id": 987654321,  // <-- This is your CHAT_ID
+             "is_bot": false,
+             "first_name": "Your Name"
+           },
+           ...
+         }
+       }
+     ]
+   }
+   ```
+   **Copy the `id` value** - this is your Chat ID
 
 3. **Create `.env` file**:
 
@@ -41,12 +86,58 @@ cp .env.example .env
 
 4. **Edit `.env`** and add your credentials:
 
-```
+```env
 TELEGRAM_BOT_TOKEN=123456789:ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefgh
 TELEGRAM_CHAT_ID=123456789
 ```
 
-### 3. Run the Service
+### 4. (Optional) Deploy to cron-job.org
+
+For automatic recurring scraping without running a local server:
+
+1. **Create a cron-job.org Account**:
+   - Go to [https://cron-job.org](https://cron-job.org)
+   - Click **Sign Up** at the top right
+   - Enter your email and create a password
+   - Verify your email address
+
+2. **Create a New Cron Job**:
+   - After logging in, click **Create Cron Job** (or use the dashboard)
+   - Fill in the following details:
+
+   | Field | Value |
+   |-------|-------|
+   | **Title** | WBM Apartment Scraper |
+   | **URL** | Your GitHub Actions webhook URL or deployment URL |
+   | **Execution Schedule** | Every 5 minutes (*/5 * * * *) |
+   | **Notifications** | Enable email notifications (optional) |
+
+3. **Deploy Your Application**:
+
+   You can host this scraper on various platforms:
+
+   **Option A: GitHub Actions (Recommended - Free)**
+   - The project includes a `.github/workflows/scrape.yml` GitHub Actions workflow
+   - Scraper runs automatically every 5 minutes
+   - Requires: `TELEGRAM_BOT_TOKEN` and `TELEGRAM_CHAT_ID` GitHub secrets
+   - No manual setup needed - just push to GitHub!
+
+   **Option B: Heroku, Railway, Render, or similar**
+   - Deploy the Node.js application to your preferred platform
+   - Set environment variables in the platform's dashboard
+   - Service will run continuously
+
+   **Option C: Your Own Server**
+   - Run the service on your local machine or VPS
+   - Use `nohup npm start > apartment-scraper.log 2>&1 &` to run in background
+   - Or set up as a systemd service (see below)
+
+   **Option D: cron-job.org**
+   - Create a simple webhook endpoint that triggers `npm start`
+   - Set the cron schedule to your desired interval
+   - Works well for low-frequency checks (every 30 min or less frequently)
+
+### 5. Run the Service Locally
 
 **Single run:**
 ```bash
@@ -75,10 +166,10 @@ After=network.target
 [Service]
 Type=simple
 User=your-username
-WorkingDirectory=/Users/aabdelshafi/Private
+WorkingDirectory=/path/to/wbm-apartment-scraper
 Environment="PATH=/usr/local/bin:/usr/bin"
-EnvironmentFile=/Users/aabdelshafi/Private/.env
-ExecStart=/usr/bin/node /Users/aabdelshafi/Private/apartment-scraper.js
+EnvironmentFile=/path/to/wbm-apartment-scraper/.env
+ExecStart=/usr/bin/node /path/to/wbm-apartment-scraper/apartment-scraper.js
 Restart=always
 RestartSec=60
 
@@ -91,6 +182,11 @@ Then:
 sudo systemctl enable apartment-scraper
 sudo systemctl start apartment-scraper
 sudo systemctl status apartment-scraper
+```
+
+**Check logs:**
+```bash
+sudo journalctl -u apartment-scraper -f
 ```
 
 ## Configuration
