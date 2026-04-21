@@ -22,14 +22,12 @@ services:
         hard: 8192
 
     environment:
-      - EMAIL_USER=${EMAIL_USER}
-      - EMAIL_PASSWORD=${EMAIL_PASSWORD}
-      - NOTIFY_EMAIL=${NOTIFY_EMAIL}
       - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN}
       - TELEGRAM_CHAT_ID=${TELEGRAM_CHAT_ID}
 
     volumes:
       - ./apartments-data.json:/app/apartments-data.json
+      - ./howoge-data.json:/app/howoge-data.json
       - ./logs:/app/logs
 
     restart: unless-stopped

@@ -164,14 +164,16 @@ class ScraperOrchestrator {
       this.howogeScraper.run()
     ]);
 
-    const failures = results.filter((r, idx) => r.status === 'rejected');
-    if (failures.length > 0) {
-      const sources = ['WBM', 'Howoge'];
-      failures.forEach((result, idx) => {
+    const sources = ['WBM', 'Howoge'];
+    results.forEach((result, idx) => {
+      if (result.status === 'rejected') {
         console.error(`[${new Date().toISOString()}] ❌ ${sources[idx]} scraper failed:`, result.reason.message);
-      });
+      }
+    });
+    const failureCount = results.filter(r => r.status === 'rejected').length;
+    if (failureCount > 0) {
       // Log but don't throw - one scraper failing shouldn't block the other
-      console.warn(`[${new Date().toISOString()}] ⚠️  ${failures.length} scraper(s) failed, but orchestration continues`);
+      console.warn(`[${new Date().toISOString()}] ⚠️  ${failureCount} scraper(s) failed, but orchestration continues`);
     }
   }
 
