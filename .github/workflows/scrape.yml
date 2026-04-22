@@ -1,8 +1,6 @@
-name: Scrape WBM Apartments
+name: Scrape Berlin Apartments
 
 on:
-  schedule:
-    - cron: '*/5 * * * *'  # Every 5 minutes
   workflow_dispatch:        # Allow manual trigger
 
 jobs:
