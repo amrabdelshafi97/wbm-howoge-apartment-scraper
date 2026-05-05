@@ -7,7 +7,7 @@
     "size": 73,
     "link": "https://www.howoge.de/immobiliensuche/wohnungssuche/detail/1771-14536-9997.html",
     "id": "howoge_https___www_howoge_de_immobiliensuche_wohnungssuche_detail_1771_14536_9997_html",
-    "fetchedAt": "2026-05-05T12:02:41.950Z"
+    "fetchedAt": "2026-05-05T12:15:52.485Z"
   },
   {
     "title": "3-Zimmer-Wohnung (mit WBS100/140 oder Einkommensprüfung bis 139,9%)",
@@ -17,6 +17,16 @@
     "size": 59,
     "link": "https://www.howoge.de/immobiliensuche/wohnungssuche/detail/1771-10560-76.html",
     "id": "howoge_https___www_howoge_de_immobiliensuche_wohnungssuche_detail_1771_10560_76_html",
-    "fetchedAt": "2026-05-05T12:02:41.950Z"
+    "fetchedAt": "2026-05-05T12:15:52.485Z"
+  },
+  {
+    "title": "Praktische 3-Zimmer-Wohnung - ideal für Familien",
+    "address": "Plonzstraße 27, 10365 Berlin, Lichtenberg",
+    "rooms": 3,
+    "rent": 629.45,
+    "size": 45,
+    "link": "https://www.howoge.de/immobiliensuche/wohnungssuche/detail/1770-20256-45.html",
+    "id": "howoge_https___www_howoge_de_immobiliensuche_wohnungssuche_detail_1770_20256_45_html",
+    "fetchedAt": "2026-05-05T12:15:52.485Z"
   }
 ]
